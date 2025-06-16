@@ -104,38 +104,6 @@ npm run build
 npm run start
 ```
 
-## ディレクトリ構成
-
-```
-.
-├── backend/              # Rails API
-│   ├── app/
-│   │   ├── controllers/
-│   │   │   └── api/v1/
-│   │   │       └── posts_controller.rb
-│   │   └── models/
-│   │       └── post.rb
-│   ├── config/
-│   │   ├── database.yml
-│   │   ├── routes.rb
-│   │   └── initializers/
-│   │       └── cors.rb
-│   ├── db/
-│   │   ├── migrate/
-│   │   └── seeds.rb
-│   ├── Dockerfile
-│   └── Gemfile
-├── frontend/             # Next.js
-│   ├── app/
-│   │   └── page.tsx
-│   ├── public/
-│   ├── package.json
-│   └── next.config.ts
-├── docker-compose.yml
-├── setup.sh
-└── README.md
-```
-
 ## 機能
 
 - ✅ Rails 7.1 APIモード
