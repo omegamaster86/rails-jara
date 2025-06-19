@@ -144,8 +144,9 @@ export default function Home() {
                 <p className="text-gray-700 mb-4 whitespace-pre-wrap">
                   {post.content}
                 </p>
-                <div className="text-sm text-gray-500">
+                <div className="text-sm text-gray-500 flex justify-between">
                   作成日: {new Date(post.created_at).toLocaleDateString('ja-JP')}
+                  <button className="bg-red-500 text-white px-2 py-1 rounded-md hover:bg-red-600">削除</button>
                 </div>
               </div>
             ))
