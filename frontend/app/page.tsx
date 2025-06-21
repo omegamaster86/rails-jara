@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import DeleteButton from './delete-button';
 
 interface Post {
   id: number;
@@ -63,6 +64,22 @@ export default function Home() {
       setError(err instanceof Error ? err.message : '投稿作成エラー');
     } finally {
       setIsCreating(false);
+    }
+  };
+
+  const deletePost = async (postId: number) => {
+    try {
+      const response = await fetch(`${API_URL}/api/v1/posts/${postId}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error('投稿の削除に失敗しました');
+      }
+
+      setPosts(posts.filter(post => post.id !== postId));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : '投稿削除エラー');
     }
   };
 
@@ -146,7 +163,7 @@ export default function Home() {
                 </p>
                 <div className="text-sm text-gray-500 flex justify-between">
                   作成日: {new Date(post.created_at).toLocaleDateString('ja-JP')}
-                  <button className="bg-red-500 text-white px-2 py-1 rounded-md hover:bg-red-600">削除</button>
+                  <DeleteButton onDelete={() => deletePost(post.id)}/>
                 </div>
               </div>
             ))
