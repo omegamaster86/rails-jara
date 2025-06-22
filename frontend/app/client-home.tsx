@@ -12,15 +12,10 @@ export default function ClientHome({ initialPosts }: ClientHomeProps) {
   const [posts, setPosts] = useState<Post[]>(initialPosts);
   const [error, setError] = useState<string | null>(null);
   const [newPost, setNewPost] = useState({ title: '', content: '' });
-  const [isCreating, setIsCreating] = useState(false);
 
   const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
   const createPost = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newPost.title.trim() || !newPost.content.trim()) return;
-
-    setIsCreating(true);
     try {
       const response = await fetch(`${API_URL}/api/v1/posts`, {
         method: 'POST',
@@ -39,8 +34,6 @@ export default function ClientHome({ initialPosts }: ClientHomeProps) {
       setNewPost({ title: '', content: '' });
     } catch (err) {
       setError(err instanceof Error ? err.message : '投稿作成エラー');
-    } finally {
-      setIsCreating(false);
     }
   };
 
@@ -73,7 +66,6 @@ export default function ClientHome({ initialPosts }: ClientHomeProps) {
       <div className="max-w-4xl mx-auto px-4">
         <h1 className="text-3xl font-bold text-gray-900 mb-8">ブログ投稿</h1>
         
-        {/* 新規投稿フォーム */}
         <div className="bg-white rounded-lg shadow-md p-6 mb-8">
           <h2 className="text-xl font-semibold mb-4">新しい投稿を作成</h2>
           <form onSubmit={createPost} className="space-y-4">
@@ -107,15 +99,13 @@ export default function ClientHome({ initialPosts }: ClientHomeProps) {
             </div>
             <button
               type="submit"
-              disabled={isCreating}
               className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isCreating ? '作成中...' : '投稿を作成'}
+              投稿を作成
             </button>
           </form>
         </div>
 
-        {/* 投稿一覧 */}
         <div className="space-y-6">
           {posts.length === 0 ? (
             <div className="text-center text-gray-500 py-8">
