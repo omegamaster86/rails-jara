@@ -1,42 +1,33 @@
 "use client";
-import { useState, useRef } from "react";
+import { useRef } from "react";
 
 interface DeleteButtonProps {
-  onDelete?: () => void; // 削除時のコールバック関数
+  onDelete?: () => void;
 }
 
 const DeleteButton = ({ onDelete }: DeleteButtonProps) => {
-  const [isPressed, setIsPressed] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
   const overlayRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleMouseDown = () => {
-    if (isDeleting) return;
     
-    setIsPressed(true);
     if (overlayRef.current) {
       overlayRef.current.style.clipPath = 'inset(0px 0px 0px 0px)';
       overlayRef.current.style.transition = 'clip-path 2s linear';
     }
 
-    // 2秒後に削除処理を実行
     timeoutRef.current = setTimeout(() => {
-      setIsDeleting(true);
-      onDelete?.(); // 削除コールバックを実行
+      onDelete?.();
     }, 2000);
   };
 
   const handleMouseUp = () => {
-    if (isDeleting) return;
     
-    setIsPressed(false);
     if (overlayRef.current) {
       overlayRef.current.style.clipPath = 'inset(0px 100% 0px 0px)';
       overlayRef.current.style.transition = 'clip-path 200ms ease-out';
     }
     
-    // タイマーをクリア
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
       timeoutRef.current = null;
@@ -44,15 +35,12 @@ const DeleteButton = ({ onDelete }: DeleteButtonProps) => {
   };
 
   const handleMouseLeave = () => {
-    if (isDeleting) return;
     
-    setIsPressed(false);
     if (overlayRef.current) {
       overlayRef.current.style.clipPath = 'inset(0px 100% 0px 0px)';
       overlayRef.current.style.transition = 'clip-path 200ms ease-out';
     }
     
-    // タイマーをクリア
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
       timeoutRef.current = null;
@@ -61,15 +49,12 @@ const DeleteButton = ({ onDelete }: DeleteButtonProps) => {
 
   return (
     <button 
-      className={`relative flex h-10 items-center gap-2 rounded-full bg-stone-100 px-6 font-medium text-stone-800 select-none transition-transform duration-150 ease-out ${
-        isPressed ? 'scale-[0.97]' : ''
-      } ${isDeleting ? 'opacity-50 cursor-not-allowed' : ''}`}
+      className="relative flex h-10 items-center gap-2 rounded-full bg-stone-100 px-6 font-medium text-stone-800 select-none transition-transform duration-150 ease-out"
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseLeave}
       onTouchStart={handleMouseDown}
       onTouchEnd={handleMouseUp}
-      disabled={isDeleting}
     >
       <div 
         ref={overlayRef}
@@ -88,7 +73,7 @@ const DeleteButton = ({ onDelete }: DeleteButtonProps) => {
             fill="currentColor"
           />
         </svg>
-        {isDeleting ? 'Deleting...' : 'Hold to Delete'}
+        Hold to Delete
       </div>
       <svg height="16" strokeLinejoin="round" viewBox="0 0 16 16" width="16">
         <path
@@ -98,7 +83,7 @@ const DeleteButton = ({ onDelete }: DeleteButtonProps) => {
           fill="currentColor"
         />
       </svg>
-      {isDeleting ? 'Deleting...' : 'Hold to Delete'}
+      Hold to Delete
     </button>
   );
 }
